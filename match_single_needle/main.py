@@ -1,8 +1,9 @@
 import cv2 as cv
 import numpy as np
 
-haystack_img = cv.imread("testhay.jpg", cv.IMREAD_UNCHANGED)
-needle_img = cv.imread("testneedle.jpg", cv.IMREAD_UNCHANGED)
+
+haystack_img = cv.imread('./images/testhay.jpg', cv.IMREAD_UNCHANGED)
+needle_img = cv.imread('./images/testneedle.jpg', cv.IMREAD_UNCHANGED)
 # adds greyscale to image
 # haystack_img = cv.cvtColor(haystack_img, cv.COLOR_BGR2GRAY)
 # needle_img = cv.cvtColor(needle_img, cv.COLOR_BGR2GRAY)

@@ -1,35 +1,42 @@
 import cv2 as cv
 import numpy as np
+import os
 
-haystack_img = cv.imread("testhay.jpg", cv.IMREAD_UNCHANGED)
-needle_img = cv.imread("testneedle.jpg", cv.IMREAD_UNCHANGED)
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+
+haystack_img = cv.imread('../images/testhay.jpg', cv.IMREAD_UNCHANGED)
+needle_img = cv.imread('../images/testneedle.jpg', cv.IMREAD_UNCHANGED)
 # adds greyscale to image
 # haystack_img = cv.cvtColor(haystack_img, cv.COLOR_BGR2GRAY)
 # needle_img = cv.cvtColor(needle_img, cv.COLOR_BGR2GRAY)
 
 result = cv.matchTemplate(haystack_img, needle_img, cv.TM_CCOEFF_NORMED)
 
+threshold = 0.9
 
-# get best match position
-min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
+locations = np.where(result >= threshold)
 
-print('Best match top left pos: %s' % str(max_loc))
-print('Best match confidence: %s' % max_val)
+locations = list(zip(*locations[::-1]))
+print(locations)
 
-threshold = 0.8
-if max_val >= threshold:
+if locations:
     print('Found needle.')
 
-    # dimensions of needle image
     needle_w = needle_img.shape[1]
     needle_h = needle_img.shape[0]
+    line_color = (0, 255, 0)
+    line_type = cv.LINE_4
+    thick = thickness = 2
 
-    top_left = max_loc
-    bottom_right = (top_left[0] + needle_w, top_left[1] + needle_h)
+    for loc in locations:
+        top_left = loc
+        bottom_right = (top_left[0] + needle_w, top_left[1] + needle_h)
+        # draw box
+        cv.rectangle(haystack_img, top_left,
+                     bottom_right, line_color, thick, line_type)
+        cv.imshow("matches", haystack_img)
+        cv.waitKey()
 
-    cv.rectangle(haystack_img, top_left, bottom_right, color=(
-        0, 255, 0), thickness=2, lineType=cv.LINE_4)
-    cv.imshow("Result", haystack_img)
-    cv.waitKey()
-else:
-    print('Needle not found.')
+    else:
+        print('Needle not found.')
