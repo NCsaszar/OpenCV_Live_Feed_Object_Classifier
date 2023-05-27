@@ -5,7 +5,7 @@ objects in real time.
 
 ## Features
 
-- Real-time object classification on live video feed
+- Real-time object classification on any active/minimized windows
 - Ability to provide positive and negative training images
 - Uses the Haar cascade classifier for object detection
 
